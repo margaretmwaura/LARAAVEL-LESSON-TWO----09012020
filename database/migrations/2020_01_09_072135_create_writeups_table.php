@@ -18,6 +18,7 @@ class CreateWriteupsTable extends Migration
             $table->timestamps();
             $table->string('title');
             $table->string('message');
+            $table->string('email');
             $table->date('date');
         });
     }

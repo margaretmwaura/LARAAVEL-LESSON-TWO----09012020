@@ -1,6 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Events\UserNotRegistered;
+use App\Events\MoreThanTwo;
+use App\Mail\MailSender;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
+
+
 
 use App\Writeup;
 use Illuminate\Http\Request;
@@ -16,6 +24,7 @@ class BlogsController extends Controller
     {
         //
         $writeups = Writeup::all();
+         $val = event(new UserNotRegistered());
         return view('blogs.read')->with('writeups',$writeups);
     }
 
@@ -39,14 +48,30 @@ class BlogsController extends Controller
     public function store(Request $request)
     {
         //
+        $user = Auth::user();
+        $email = $user->email;
+
         $onetodo = new Writeup();
-        $onetodo -> title = $request->input('title');;
-        $onetodo -> message = $request->input('message');;
-        $onetodo -> date = $request->input('dob');;
+        $onetodo -> title = $request->input('title');
+        $onetodo -> message = $request->input('message');
+        $onetodo -> date = $request->input('dob');
+        $onetodo -> email = $email;
         $onetodo -> save();
+
+        // Get the currently authenticated user...
+
+
+       $writes =  DB::table('writeups')->where('email', $email)->get();
+       $count = count($writes);
+        if ($count >= 2){
+            event(new MoreThanTwo());
+        }
+
+        Mail::to($email)->send(new MailSender());
 //        return view('blogs.read')->with('success','You have succesfully Added a blog');
 
 
+        return redirect()->back()->with('success','The blog has been published , an email has been sent');
     }
 
     /**

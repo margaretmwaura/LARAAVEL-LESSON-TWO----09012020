@@ -36,7 +36,8 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                       <a class="dropdown-item" href="/writeups">The blogs</a>
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -50,7 +51,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
-
+                                <a class="dropdown-item" href="/writeups/create">Create Blog</a>
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a href="{{ route('logout') }}"

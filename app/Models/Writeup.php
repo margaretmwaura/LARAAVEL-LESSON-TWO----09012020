@@ -10,6 +10,19 @@ class Writeup extends Model
     //
     protected $fillable = ['title','message','date'];
 
+    public function setTile($value)
+    {
+       return $this->attributes['title'] = ucfirst($value);
+    }
+    public function setMessage($value)
+    {
+       return $this->attributes['message'] = ucfirst($value);
+    }
+    public function setDate($value)
+    {
+       return $this->attributes['date'] = \Carbon\Carbon::parse($value)->format('d/m/Y');;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

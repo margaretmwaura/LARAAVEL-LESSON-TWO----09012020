@@ -7,14 +7,19 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
-
+use Facades\App\Repository\BlogInterface;
 
 use App\Models\Writeup;
 use Illuminate\Http\Request;
 
 class BlogsController extends Controller
 {
-    public $change = 0;
+    protected $artilcerepo;
+    public function __construct(BlogInterface $artilcerepo)
+    {
+        $this->artilcerepo=$artilcerepo;
+    }
+
     public function index(){
             $writeups = Writeup::all();
             return view('blogs.read')->with('writeups',$writeups);
@@ -31,7 +36,7 @@ class BlogsController extends Controller
         $onetodo = new Writeup();
 //
         $onetodo->user_id=$user->id;
-        $onetodo->title = $request->input('title');
+        $onetodo->setTile($request->input('title'));
         $onetodo->message = $request->input('message');
         $onetodo->date = $request->input('dob');
 //        $onetodo -> email = $email;

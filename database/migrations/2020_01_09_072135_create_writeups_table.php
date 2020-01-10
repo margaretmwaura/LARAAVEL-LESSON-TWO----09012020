@@ -16,9 +16,9 @@ class CreateWriteupsTable extends Migration
         Schema::create('writeups', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+            $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->string('message');
-            $table->string('email');
             $table->date('date');
         });
     }

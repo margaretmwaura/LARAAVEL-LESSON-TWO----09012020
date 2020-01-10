@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 
-use App\Writeup;
+use App\Models\Writeup;
 use Illuminate\Http\Request;
 
 class BlogsController extends Controller

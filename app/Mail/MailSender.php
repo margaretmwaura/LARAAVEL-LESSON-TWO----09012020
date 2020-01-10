@@ -16,9 +16,11 @@ class MailSender extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public $sendmail;
+    public function __construct($sendmail)
     {
         //
+        $this->sendmail = $sendmail;
     }
 
     /**

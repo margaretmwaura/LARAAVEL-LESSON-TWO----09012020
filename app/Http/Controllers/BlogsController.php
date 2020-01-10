@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Events\UserNotRegistered;
 use App\Events\MoreThanTwo;
 use App\Mail\MailSender;
 use Illuminate\Support\Facades\Auth;
@@ -15,63 +14,20 @@ use Illuminate\Http\Request;
 
 class BlogsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public $change = 0;
-    public function index()
-    {
-        //
-        if($this->change == 0)
-        {
-            $writeups = Cache::remember('blogs', 22*60, function() {
-                return Writeup::all();
-            });
-            echo " From cache";
-            return view('blogs.read')->with('writeups',$writeups);
-        }
-        else{
-
+    public function index(){
             $writeups = Writeup::all();
-
-            if (Cache::has('blogs')){
-                Cache::forget('blogs');
-                Cache::put('blogs', $writeups, 10);
-            } else {
-                Cache::put('key', $writeups, 10);
-            }
-
-             echo "From database";
             return view('blogs.read')->with('writeups',$writeups);
-        }
-
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
         return view('blogs.create');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
-    {
-        //
+    {//
         $user = Auth::user();
         $email = $user->email;
-
+        $name = $user->name;
         $onetodo = new Writeup();
         $onetodo -> title = $request->input('title');
         $onetodo -> message = $request->input('message');
@@ -79,23 +35,25 @@ class BlogsController extends Controller
         $onetodo -> email = $email;
         $onetodo -> save();
 
-        // Get the currently authenticated user...
+
+//       $writes =  DB::table('writeups')->where('email', $email)->get();
+//       $count = count($writes);
+//        if ($count >= 2){
+//            event(new MoreThanTwo());
+//        }
 
 
-       $writes =  DB::table('writeups')->where('email', $email)->get();
-       $count = count($writes);
-        if ($count >= 2){
-            event(new MoreThanTwo());
-        }
 
-        Mail::to($email)->send(new MailSender());
+        $emaildata = new \stdClass();
+        $emaildata->sendto = $name;
+
+        Mail::to($email)->send(new MailSender($emaildata));
 //        return view('blogs.read')->with('success','You have succesfully Added a blog');
 
         $this->change = 1;
 
         return redirect()->back()->with('success','The blog has been published , an email has been sent');
     }
-
     /**
      * Display the specified resource.
      *
@@ -106,32 +64,14 @@ class BlogsController extends Controller
     {
         //
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
         $writeup =  Writeup::find($id);
         $this->change = 1;
         return view('blogs.edit')->with('writeup',$writeup);
-
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
         $writeup =  Writeup::find($id);
         $writeup -> title = $request->input('title');;
         $writeup -> message = $request->input('message');;

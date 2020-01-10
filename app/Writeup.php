@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Writeup extends Model
 {
     //
-    protected $fillable = ['title','message','date','email'];
+    protected $fillable = ['title','message','date'];
 }

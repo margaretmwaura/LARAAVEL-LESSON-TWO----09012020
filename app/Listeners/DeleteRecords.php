@@ -31,10 +31,10 @@ class DeleteRecords
      */
     public function handle(MoreThanTwo $event)
     {
-        $email = $event->user->email;
-        $row = DB::table('writeups')->where('email', $email)->oldest()->first();
-        $id = $row->id;
-        DB::table('writeups')->where('id',$id)->delete();
+//        $email = $event->user->email;
+//        $row = DB::table('writeups')->where('email', $email)->oldest()->first();
+//        $id = $row->id;
+//        DB::table('writeups')->where('id',$id)->delete();
 
     }
 

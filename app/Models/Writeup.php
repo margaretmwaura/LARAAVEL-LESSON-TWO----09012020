@@ -18,11 +18,12 @@ class Writeup extends Model
     {
        return $this->attributes['message'] = ucfirst($value);
     }
-    public function setDate($value)
+    public function getTime()
     {
-       return $this->attributes['date'] = \Carbon\Carbon::parse($value)->format('d/m/Y');;
+         $val =$this->attributes['date'];
+      return  \Carbon\Carbon::createFromFormat('Y-m-d', $val)
+            ->format('d, M D Y');
     }
-
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -4,6 +4,7 @@
 namespace App\Listeners;
 
 
+use App\Events\MoreThanTwo;
 use App\Writeup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -28,11 +29,13 @@ class DeleteRecords
      *
      * @return $this
      */
-    public function handle()
+    public function handle(MoreThanTwo $event)
     {
-        $writeUps = Writeup::oldest()->first();
+        $email = $event->user->email;
+        $row = DB::table('writeups')->where('email', $email)->oldest()->first();
+        $id = $row->id;
+        DB::table('writeups')->where('id',$id)->delete();
 
-        $writeUps->delete();
     }
 
 }

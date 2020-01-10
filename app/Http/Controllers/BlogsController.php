@@ -7,7 +7,7 @@ use App\Mail\MailSender;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Cache;
 
 
 use App\Writeup;
@@ -20,12 +20,33 @@ class BlogsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public $change = 0;
     public function index()
     {
         //
-        $writeups = Writeup::all();
-         $val = event(new UserNotRegistered());
-        return view('blogs.read')->with('writeups',$writeups);
+        if($this->change == 0)
+        {
+            $writeups = Cache::remember('blogs', 22*60, function() {
+                return Writeup::all();
+            });
+            echo " From cache";
+            return view('blogs.read')->with('writeups',$writeups);
+        }
+        else{
+
+            $writeups = Writeup::all();
+
+            if (Cache::has('blogs')){
+                Cache::forget('blogs');
+                Cache::put('blogs', $writeups, 10);
+            } else {
+                Cache::put('key', $writeups, 10);
+            }
+
+             echo "From database";
+            return view('blogs.read')->with('writeups',$writeups);
+        }
+
     }
 
     /**
@@ -70,6 +91,7 @@ class BlogsController extends Controller
         Mail::to($email)->send(new MailSender());
 //        return view('blogs.read')->with('success','You have succesfully Added a blog');
 
+        $this->change = 1;
 
         return redirect()->back()->with('success','The blog has been published , an email has been sent');
     }
@@ -95,6 +117,7 @@ class BlogsController extends Controller
     {
         //
         $writeup =  Writeup::find($id);
+        $this->change = 1;
         return view('blogs.edit')->with('writeup',$writeup);
 
     }
@@ -114,6 +137,7 @@ class BlogsController extends Controller
         $writeup -> message = $request->input('message');;
         $writeup -> date = $request->input('dob');
         $writeup->save();
+        $this->change = 1;
         return redirect()->back()->with('success','The blog has been edited');
     }
 
@@ -128,6 +152,7 @@ class BlogsController extends Controller
         //
         $employee = Writeup::find($id);
         $employee->delete();
+        $this->change =1;
         return redirect()->back()->with('success','The blog has been deleted');
 
     }

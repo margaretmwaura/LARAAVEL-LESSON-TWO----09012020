@@ -7,6 +7,7 @@ namespace App\Events;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 
 
 class MoreThanTwo extends Event
@@ -18,9 +19,10 @@ class MoreThanTwo extends Event
      *
      * @return void
      */
+    public $user;
     public function __construct()
     {
-        parent::__construct();
+        $this->user = Auth::user();
     }
 
     /**

@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 use App\Events\MoreThanTwo;
 use App\Mail\MailSender;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 use App\Models\Writeup;
 use Illuminate\Http\Request;
 use App\Repository\Interfaces\BlogRepositoryInterface;
+use App\Models\Joining;
+use PhpParser\Node\Scalar\String_;
+use function MongoDB\BSON\toJSON;
 
 
 class BlogsController extends Controller
@@ -57,8 +61,9 @@ class BlogsController extends Controller
 //        return view('blogs.read')->with('success','You have succesfully Added a blog');
 
         $this->change=1;
-
-        return redirect()->back()->with('success','The blog has been published , an email has been sent' );
+        $query = new Joining();
+         dd($query);
+        return redirect()->back()->with('success','The blog has been published , an email has been sent');
     }
     /**
      * Display the specified resource.

@@ -18,6 +18,10 @@ class Writeup extends Model
     {
        return $this->attributes['message'] = ucfirst($value);
     }
+    public function setDate($value)
+    {
+        return $this->attributes['date'] = $value;
+    }
     public function getTime()
     {
          $val =$this->attributes['date'];

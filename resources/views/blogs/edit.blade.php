@@ -11,10 +11,6 @@
             {{Form::label('message','Describe your To Do')}}
             {{Form::textarea('message',$writeup->message) }}
         </div>
-        <div class ="form-group">
-            {{Form::label('time','When is your to do due')}}
-            {{Form::date('dob', $writeup->date) }}
-        </div>
         {{Form::hidden('_method','PUT')}}
         {{Form::submit('Submit')}}
         {!! Form::close() !!}

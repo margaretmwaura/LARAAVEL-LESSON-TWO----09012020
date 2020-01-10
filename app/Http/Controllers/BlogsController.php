@@ -29,20 +29,20 @@ class BlogsController extends Controller
         $email = $user->email;
         $name = $user->name;
         $onetodo = new Writeup();
-        $onetodo -> title = $request->input('title');
-        $onetodo -> message = $request->input('message');
-        $onetodo -> date = $request->input('dob');
-        $onetodo -> email = $email;
+//
+        $onetodo->user_id=$user->id;
+        $onetodo->title = $request->input('title');
+        $onetodo->message = $request->input('message');
+        $onetodo->date = $request->input('dob');
+//        $onetodo -> email = $email;
         $onetodo -> save();
 
 
-//       $writes =  DB::table('writeups')->where('email', $email)->get();
-//       $count = count($writes);
-//        if ($count >= 2){
-//            event(new MoreThanTwo());
-//        }
-
-
+       $writes =  Writeup::GetRecord($user->id);
+       $count = count($writes);
+        if ($count >= 2){
+            event(new MoreThanTwo());
+        }
 
         $emaildata = new \stdClass();
         $emaildata->sendto = $name;
@@ -73,9 +73,9 @@ class BlogsController extends Controller
     public function update(Request $request, $id)
     {
         $writeup =  Writeup::find($id);
-        $writeup -> title = $request->input('title');;
-        $writeup -> message = $request->input('message');;
-        $writeup -> date = $request->input('dob');
+        $writeup->title = $request->input('title');;
+        $writeup->message = $request->input('message');;
+        $writeup->date = $request->input('dob');
         $writeup->save();
         $this->change = 1;
         return redirect()->back()->with('success','The blog has been edited');

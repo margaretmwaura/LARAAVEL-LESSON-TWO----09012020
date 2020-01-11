@@ -6,10 +6,7 @@
             <p>{{ $note->title  }}</p>
             <p>{{ $note->message }}</p>
             <p>{{ $note->getTime()}}</p>
-
-
                @guest
-
                @else
                <p>{!! Form::open(['action'=> ['BlogsController@destroy'  , $note -> id], 'method' =>'POST']) !!}
                    {{Form::submit('DELETE EVENT' , ['class' => 'delete'])}}
@@ -19,7 +16,6 @@
                <p>
                    <a href="/writeups/{{$note->id}}/edit" class="btn btn-default">Edit</a>
                </p>
-
                @endguest
 
        </div>

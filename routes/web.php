@@ -17,11 +17,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-//Route::get('/read', function () {
-//    return view('blogs.read');
-//});
-
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('writeups','BlogsController');
 
-//Route::get('/create', 'Pagescontroller@index');

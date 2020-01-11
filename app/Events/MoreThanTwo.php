@@ -22,7 +22,7 @@ class MoreThanTwo extends Event
     public $user;
     public function __construct()
     {
-        $this->user = Auth::user();
+        $this->user=Auth::user();
     }
 
     /**

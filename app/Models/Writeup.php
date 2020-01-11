@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\User;
 class Writeup extends Model
 {
     //
     protected $fillable = ['title','message','date'];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     public function setTile($value)
     {
        return $this->attributes['title'] = ucfirst($value);
@@ -28,10 +32,7 @@ class Writeup extends Model
       return  \Carbon\Carbon::createFromFormat('Y-m-d', $val)
             ->format('d, M D Y');
     }
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+
     public static function scopeGetOldest($query,$id)
    {
       return $query->where('user_id', $id)->oldest()->first();

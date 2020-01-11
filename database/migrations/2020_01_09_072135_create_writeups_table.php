@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateWriteupsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('writeups', function (Blueprint $table) {

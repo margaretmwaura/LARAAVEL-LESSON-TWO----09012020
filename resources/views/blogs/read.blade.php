@@ -1,5 +1,7 @@
 @extends('layouts.app')
 @section('content')
+
+    <h1>Welcome to blogging</h1>
     @foreach ($writeups as $note)
        <div style="width: 100% " class="container">
            <div style="width: 100% ; height: 20px ; background-color: indianred">

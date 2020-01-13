@@ -36,8 +36,7 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                       <a class="dropdown-item" href="/writeups">The blogs</a>
-
+                       <a  href="/writeups" style="margin-top:30px">The blogs</a>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

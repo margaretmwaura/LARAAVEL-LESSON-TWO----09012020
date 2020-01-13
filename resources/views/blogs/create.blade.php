@@ -10,7 +10,7 @@
         </div>
         <div class ="form-group">
             {{Form::label('message','Describe your To Do')}}
-            {{Form::textarea('message',' '}}
+            {{Form::textarea('message',' ')}}
         </div>
         {{Form::submit('Submit',['class' => "submit"]) }}
         {!! Form::close() !!}

@@ -40,20 +40,7 @@ class BlogsController extends Controller
         $email=$user->email;
         $name=$user->name;
 
-        try {
-            $onetodo=new Writeup();
-            $onetodo->user_id=$user->id;
-            $onetodo->setTile($request->input('title'));
-            $onetodo->setMessage($request->input('message'));
-            $onetodo->setDate(\Carbon\Carbon::now());
-            echo "The data " . $request->input('dob');
-            $onetodo->save();
-
-            Log::info("The data has been saved");
-        } catch (\Exception $e) {
-            Log::info("An error was encountered");
-        }
-
+       $this->blogRepository->storeRecord($request,$user->id);
        $writes=$this->blogRepository->getRecordById($user->id);
        $count = count($writes);
         if ($count >= 2){
@@ -63,8 +50,8 @@ class BlogsController extends Controller
         $emaildata->sendto = $name;
 
         Mail::to($email)->send(new MailSender($emaildata));
-        $query = new Joining();
-         dd($query);
+//        $query = new Joining();
+//         dd($query);
         return redirect()->back()->with('success','The blog has been published , an email has been sent');
     }
     public function show($id)
@@ -78,28 +65,12 @@ class BlogsController extends Controller
     }
     public function update(Request $request, $id)
     {
-        $writeup=$this->blogRepository->find($id);
-
-        try{
-            $writeup->setTile($request->input('title'));
-            $writeup->setMessage($request->input('message'));
-            $writeup->setDate(\Carbon\Carbon::now());
-
-            $writeup->save();
-            Log::info("Data has been saved");
-        }catch (\Exception $exception)
-        {
-            Log::info("An error was encounterd");
-        }
-
-        $this->change = 1;
+        $this->blogRepository->updateRecord($request, $id);
         return redirect()->back()->with('success','The blog has been edited');
     }
     public function destroy($id)
     {
-        $employee = $this->blogRepository->find($id);
-        $employee->delete();
-        $this->change =1;
+        $this->blogRepository->deleteRecord($id);
         return redirect()->back()->with('success','The blog has been deleted');
 
     }

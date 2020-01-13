@@ -1,11 +1,22 @@
 @extends('layouts.app')
 @section('content')
     @foreach ($writeups as $note)
-       <div style="width: 100% ; text-align: center">
-            <p>{{ $note->id }}</p>
-            <p>{{ $note->title  }}</p>
-            <p>{{ $note->message }}</p>
-            <p>{{ $note->getTime()}}</p>
+       <div style="width: 100% " class="container">
+           <div style="width: 100% ; height: 20px ; background-color: indianred">
+               <p>{{ $note->id }}</p>
+           </div>
+           <div style="width: 100% ; height: 20px ; background-color: indigo">
+               <p>{{ $note->title  }}</p>
+           </div>
+           <div style="width: 100% ; height: 100px ; color: black ; font-weight: bolder">
+               <p>{{ $note->message }}</p>
+           </div>
+           <div style="width: 100% ; height: 10px ; color: black ; font-weight: bolder">
+               <p>{{ $note->getTime()}}</p>
+           </div>
+
+
+
                @guest
                @else
                <p>{!! Form::open(['action'=> ['BlogsController@destroy'  , $note -> id], 'method' =>'POST']) !!}

@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class BlogsControlerTest extends TestCase
 {
 //    use DatabaseTransactions;
-    use RefreshDatabase;
+//    use RefreshDatabase;
 
     public function test_signed_in_user_can_see_create_form()
     {
@@ -39,6 +39,12 @@ class BlogsControlerTest extends TestCase
         $user = factory(User::class)->create();
         factory(Writeup::class)->create(['user_id' => $user->id]);
         $response = $this->get('writeups');
-         $response->assertStatus(200);
+         $response->assertStatus(201);
+    }
+
+    public function test_deleting_blog_in_the_database()
+    {
+        $this->delete('writeups/82');
+        $this->assertDatabaseMissing('writeups',['id' => 82]);
     }
 }

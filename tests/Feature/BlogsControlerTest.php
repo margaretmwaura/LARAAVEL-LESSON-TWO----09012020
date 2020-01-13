@@ -2,13 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\BlogsController;
 use App\Models\User;
 use App\Models\Writeup;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\Repository\BlogRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
+use Mockery;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BlogsControlerTest extends TestCase
 {
@@ -46,5 +47,49 @@ class BlogsControlerTest extends TestCase
     {
         $this->delete('writeups/82');
         $this->assertDatabaseMissing('writeups',['id' => 82]);
+    }
+
+    public function test_the_delete_function()
+    {
+        Event::fake();
+
+        $this->withoutExceptionHandling();
+        $id = 83;
+        $controller =new BlogRepository();
+        $controller->deleteRecord($id);
+        $this->assertDatabaseMissing('writeups',['id' => 83]);
+
+    }
+
+    public function test_the_store_function_in_repo()
+    {
+        Event::fake();
+        $id = 84;
+        $request = Request::create('/store', 'POST',[
+            'title'=>'Testing repo',
+            'message'=>'It is working',
+        ]);
+        $controller =new BlogRepository();
+        $controller->updateRecord($request,$id);
+        $this->assertDatabaseHas('writeups',['title' => 'Testing repo']);
+    }
+
+    public function test_the_controller_with_repo()
+    {
+        $id = 84;
+        $mock = Mockery::mock(BlogRepository::class);
+        $mock->shouldReceive('deleteRecord')->with($id)->once()->andReturn(true);
+        $controller = new BlogsController($mock);
+        $this->assertEquals(1,  $controller->destroy($id));
+//        $this->assertDatabaseMissing('writeups',['id' => 84]);
+        Mockery::close();
+    }
+
+    public function test_the_find_function_in_repository()
+    {
+        $id = 84;
+        $controller =new BlogRepository();
+        $response=$controller->find($id);
+        dd($response);
     }
 }

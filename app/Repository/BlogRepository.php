@@ -33,7 +33,8 @@ class BlogRepository implements BlogRepositoryInterface
     {
         $writeup = Writeup::find($id);
         $writeup->delete();
-        Cache::forget('blogs');
+//        Cache::forget('blogs');
+        return true;
     }
     public function updateRecord(Request $request, $id)
     {
@@ -51,7 +52,7 @@ class BlogRepository implements BlogRepositoryInterface
             Log::info("An error was encounterd" .$exception->getMessage());
         }
 
-        Cache::forget('blogs');
+//        Cache::forget('blogs');
     }
 
     public function storeRecord(Request $request, $id)

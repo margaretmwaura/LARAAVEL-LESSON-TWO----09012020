@@ -71,7 +71,8 @@ class BlogsController extends Controller
     public function destroy($id)
     {
         $this->blogRepository->deleteRecord($id);
-        return redirect()->back()->with('success','The blog has been deleted');
+        return 1;
+//        return redirect()->back()->with('success','The blog has been deleted');
 
     }
 }

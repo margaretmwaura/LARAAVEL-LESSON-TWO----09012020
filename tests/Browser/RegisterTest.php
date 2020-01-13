@@ -9,11 +9,17 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class RegisterTest extends DuskTestCase
 {
-    /**
-     * A Dusk test example.
-     *
-     * @return void
-     */
+
+    use DatabaseMigrations;
+
+    protected $user;
+
+    public function setUp(){
+        parent::setUp();
+        $this->user = factory(User::class)->create();
+
+    }
+
     public function testExample()
     {
         $this->browse(function (Browser $browser) {
@@ -25,10 +31,15 @@ class RegisterTest extends DuskTestCase
 
     public function testAuthentication()
     {
-        $this->browse(function (Browser $browser) {
-            $browser->loginAs(User::find(1))
+        $user = $this->user;
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->loginAs($user)
                 ->visit('/')
-                ->assertSee('Create Blog');
+                ->assertSee('Create Blog')
+                ->assertAuthenticatedAs($user)
+                ->logout()
+                ->assertGuest();
         });
     }
 }
